@@ -1,0 +1,8 @@
+/*
+!.gitignore
+!pom.xml
+!/src
+!/oh-my-news-backup-business
+!/oh-my-news-backup-model
+!/oh-my-news-backup-service
+!/oh-my-news-backup-web

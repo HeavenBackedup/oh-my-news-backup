@@ -1,0 +1,70 @@
+<div class="app" id="app"
+     ng-class="{'app-header-fixed':app.settings.headerFixed, 'app-aside-fixed':app.settings.asideFixed, 'app-aside-folded':app.settings.asideFolded}">
+    <div class="app-header navbar">
+        <!-- navbar header -->
+        <div class="navbar-header bg-black">
+            <!-- brand -->
+            <a href="#/" class="navbar-brand text-lt">
+                <i class="fa fa-btc"></i>
+                <img src="images/logo.png" alt="." class="hide">
+                <span class="hidden-folded m-l-xs">ohmyNews后台</span> </a>
+            <!-- / brand -->
+        </div>
+        <!-- / navbar header -->
+
+        <div class="collapse navbar-collapse box-shadow bg-white-only">
+            <!-- buttons -->
+            <div class="nav navbar-nav m-l-sm hidden-xs">
+                <a href class="btn no-shadow navbar-btn"
+                   ng-click="app.settings.asideFolded = !app.settings.asideFolded">
+                    <i class="fa fa-dedent fa-fw"></i>
+                </a>
+                <a href class="btn no-shadow navbar-btn" ui-toggle-class="show" target="#aside-user">
+                    <i class="icon-user fa-fw"></i>
+                </a>
+            </div>
+            <!-- / buttons -->
+
+
+            <!-- search form -->
+
+        </div>
+    </div>
+    <div class="app-aside hidden-xs bg-black">
+        <div class="aside-wrap">
+            <div class="navi-wrap">
+                <!-- nav -->
+                <nav ui-nav class="navi">
+
+                    <ul>
+                        <li ui-sref-active="active">
+                            <a ui-sref="app.userVerify" ui-sref-opts="{reload:true}">
+                                <i class="glyphicon glyphicon-signal"></i>
+                                <span>用户管理</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li ui-sref-active="active">
+                            <a ui-sref="app.contentVerify" ui-sref-opts="{reload:true}">
+                                <i class="glyphicon glyphicon-signal"></i>
+                                <span>审核管理</span>
+                            </a>
+                        </li>
+                    </ul>
+
+
+                </nav>
+                <!-- nav -->
+            </div>
+        </div>
+    </div>
+
+    <!-- content -->
+    <div class="app-content">
+        <div ui-butterbar></div>
+        <a href class="off-screen-toggle hide" ui-toggle-class="off-screen" data-target=".app-aside"></a>
+
+        <div class="app-content-body fade-in-up" ui-view></div>
+    </div>
+</div>
