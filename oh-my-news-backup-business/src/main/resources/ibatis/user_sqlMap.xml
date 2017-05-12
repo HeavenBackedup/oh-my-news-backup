@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="user_sqlMap">
+    <resultMap id="user_resultMap" class="com.oh.news.backup.model.po.User">
+        <result property="userid" column="id" jdbcType="INTEGER"></result>
+        <result property="username" column="username" jdbcType="VARCHAR"></result>
+        <result property="email" column="email" jdbcType="VARCHAR"></result>
+        <result property="registertime" column="date" jdbcType="TIMESTAMP"></result>
+        <result property="status" column="is_limit" jdbcType="INTEGER"></result>
+        <result property="deadline" column="deadline" jdbcType="TIMESTAMP"></result>
+        <result property="reportnumber" column="report" jdbcType="INTEGER"></result>
+    </resultMap>
+    <select id="sortbyId" parameterClass="java.util.Map" resultMap="user_resultMap">
+        SELECT `id`,`username`,`email`,`date`,`is_limit`,`deadline`,(SELECT sum(article.report) from `article` where `user`.id = `article`.user_id) `report` from `user`
+        where is_delete=0
+        <dynamic >
+            <isNotEmpty prepend="and" property="userid">
+                `id`=#userid#
+            </isNotEmpty>
+            <isNotEmpty property="username" prepend="and">
+                `username`=#username#
+            </isNotEmpty>
+            <isNotEmpty property="registertime" prepend="and">
+                `date`=#registertime#
+            </isNotEmpty>
+            <isNotEmpty property="status" prepend="and">
+                `is_limit`=#status#
+            </isNotEmpty>
+        </dynamic>
+        order by `id` asc limit #currentPage#,#pageItemNum#;
+    </select>
+    <select id="sortbyIdNum" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+        SELECT COUNT(id) from `user`
+        where is_delete=0
+        <dynamic >
+            <isNotEmpty prepend="and" property="userid">
+                `id`=#userid#
+            </isNotEmpty>
+            <isNotEmpty property="username" prepend="and">
+                `username`=#username#
+            </isNotEmpty>
+            <isNotEmpty property="registertime" prepend="and">
+                `date`=#registertime#
+            </isNotEmpty>
+            <isNotEmpty property="status" prepend="and">
+                `is_limit`=#status#
+            </isNotEmpty>
+        </dynamic>
+        ;
+    </select>
+
+    <select id="sortbyRegistertime" parameterClass="java.util.Map" resultMap="user_resultMap">
+        SELECT `id`,`username`,`email`,`date`,`is_limit`,`deadline`,(SELECT sum(article.report) from `article` where `user`.id = `article`.user_id) `report` from `user`
+        where is_delete=0
+        <dynamic >
+            <isNotEmpty prepend="and" property="userid">
+                `id`=#userid#
+            </isNotEmpty>
+            <isNotEmpty property="username" prepend="and">
+                `username`=#username#
+            </isNotEmpty>
+            <isNotEmpty property="registertime" prepend="and">
+                `date`=#registertime#
+            </isNotEmpty>
+            <isNotEmpty property="status" prepend="and">
+                `is_limit`=#status#
+            </isNotEmpty>
+        </dynamic>
+        order by `date` desc limit #currentPage#,#pageItemNum#;
+    </select>
+
+    <select id="sortbyReport" parameterClass="java.util.Map" resultMap="user_resultMap">
+        SELECT `id`,`username`,`email`,`date`,`is_limit`,`deadline`,(SELECT sum(article.report) from `article` where `user`.id = `article`.user_id) `report` from `user`
+        where is_delete=0
+        <dynamic >
+            <isNotEmpty prepend="and" property="userid">
+                `id`=#userid#
+            </isNotEmpty>
+            <isNotEmpty property="username" prepend="and">
+                `username`=#username#
+            </isNotEmpty>
+            <isNotEmpty property="registertime" prepend="and">
+                `date`=#registertime#
+            </isNotEmpty>
+            <isNotEmpty property="status" prepend="and">
+                `is_limit`=#status#
+            </isNotEmpty>
+        </dynamic>
+        order by `report` desc limit #currentPage#,#pageItemNum#;
+    </select>
+
+    <select id="sortbyStatus" parameterClass="java.util.Map" resultMap="user_resultMap">
+        SELECT `id`,`username`,`email`,`date`,`is_limit`,`deadline`,(SELECT sum(article.report) from `article` where `user`.id = `article`.user_id) `report` from `user`
+        where is_delete=0
+        <dynamic>
+            <isNotEmpty prepend="and" property="userid">
+                `id`=#userid#
+            </isNotEmpty>
+            <isNotEmpty property="username" prepend="and">
+                `username`=#username#
+            </isNotEmpty>
+            <isNotEmpty property="registertime" prepend="and">
+                `date`=#registertime#
+            </isNotEmpty>
+            <isNotEmpty property="status" prepend="and">
+                `is_limit`=#status#
+            </isNotEmpty>
+        </dynamic>
+        order by `is_limit` desc limit #currentPage#,#pageItemNum#;
+    </select>
+
+    <select id="sortbyDeadline" parameterClass="java.util.Map" resultMap="user_resultMap">
+        SELECT `id`,`username`,`email`,`date`,`is_limit`,`deadline`,(SELECT sum(article.report) from `article` where `user`.id = `article`.user_id) `report` from `user`
+        where is_delete=0
+        <dynamic >
+            <isNotEmpty prepend="and" property="userid">
+                `id`=#userid#
+            </isNotEmpty>
+            <isNotEmpty property="username" prepend="and">
+                `username`=#username#
+            </isNotEmpty>
+            <isNotEmpty property="registertime" prepend="and">
+                `date`=#registertime#
+            </isNotEmpty>
+            <isNotEmpty property="status" prepend="and">
+                `is_limit`=#status#
+            </isNotEmpty>
+        </dynamic>
+        order by `deadline` desc limit #currentPage#,#pageItemNum#;
+    </select>
+
+    <update id="update_user" parameterClass="java.util.Map">
+        UPDATE `user` set is_limit=#status#,deadline=#deadline# where id=#userid# and is_delete=0;
+    </update>
+</sqlMap>

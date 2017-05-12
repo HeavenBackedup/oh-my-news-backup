@@ -1,3 +1,176 @@
-<div>
-    用户管理
+<style type="text/css">
+
+    .table-bordered th,
+    .table-bordered td {
+        border: 1px solid #000 !important;
+        height: 30px;
+        text-align: center;
+    }
+</style>
+
+<form style="padding-top: 15px" class="form-inline" role="form" ng-init="init()">
+    <div class="form-group container" style="width: 100%">
+        <label for="username"><b>用户名</b></label>
+        <input type="text" id="username" class="form-control" style="width: 25%" ng-model="username" placeholder="">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <label for="userid"><b>用户id</b></label>
+        <input type="text" id="userid" class="form-control " ng-model="userid" style="width:25%" placeholder="">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <label for="status"><b>当前状态</b></label>
+        <select class="form-control" ng-model="status" id="status" style="width: 25%;font-size:smaller">
+            <option ng-value="0">正常</option>
+            <option ng-value="1">有限封禁</option>
+            <option ng-value="2">无限封禁</option>
+        </select>
+    </div>
+    <div class=" dropdown container" style="width: 100%;padding-top: 15px">
+        <label for="registertime"><b>注册时间</b></label>
+        <a class="dropdown-toggle" id="start" role="button" data-toggle="dropdown" href="">
+            <div class="input-group" style="width: 40%;font-size:smaller">
+                <input type="text" class="form-control" id="registertime"
+                       data-ng-model="registertime" datepicker-popup="yyyy-MM-dd HH:mm:ss" placeholder="">
+            </div>
+        </a>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <datetimepicker data-ng-model="registertime"
+                            data-datetimepicker-config="{ dropdownSelector: '#start' }">
+            </datetimepicker>
+        </ul>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+        <label for="sort"><b>排序方式</b></label>
+        <select class="form-control" id="sort" ng-model="sort" style="width: 25%;font-size: smaller">
+            <option ng-value="0">用户id</option>
+            <option ng-value="1">注册时间</option>
+            <option ng-value="2">被举报次数</option>
+            <option ng-value="3">当前状态</option>
+            <option ng-value="4">截止时间</option>
+        </select>
+        &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
+
+
+        <button type="submit" ng-click="submitVerifyInfo()" class="btn btn-primary">查询</button>
+
+        &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
+        <button type="submit" class="btn btn-primary" ng-click="empty()">清空</button>
+    </div>
+
+</form>
+<form style="padding-right: 10px ;padding-left: 10px">
+    <table class="table table-bordered">
+        <h2>
+            <caption class="text-center text-primary" style="font-size: large"><b>用户管理表单</b></caption>
+        </h2>
+        <thead>
+        <tr style="text-align: center">
+            <th>用户id</th>
+            <th>用户名</th>
+            <th>注册时间</th>
+            <th>注册邮箱</th>
+            <th>被举报次数</th>
+            <th>当前状态</th>
+            <th>截止时间</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="user in users" style="text-align: center">
+            <td>{{user.userid}}</td>
+            <td>{{user.username}}</td>
+            <td>{{user.registertime|date:'yyyy-MM-dd HH:mm:ss'}}</td>
+            <td>{{user.email}}</td>
+            <td>{{user.reportnumber}}</td>
+            <td>{{user.status==0?'正常':user.status==1?'有限封禁':'无限封禁'}}</td>
+            <td>{{user.deadline|date:'yyyy-MM-dd HH:mm:ss'}}</td>
+            <td>
+                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal"
+                        data-ng-click="modifystate(user)">修改状态
+                </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button type="button" class="btn btn-primary btn-sm " ng-click="jumpPage(user)">详情</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <div class="text-center">
+        <div uib-pagination ng-change="submitVerifyInfo()" total-items="pagination.totalItems"
+             ng-model="pagination.currentPage" max-size="pagination.maxSize" first-text="首页" last-text="尾页"
+             next-text="下一页" previous-text="上一页" class="pagination" boundary-links="true" rotate="false"></div>
+    </div>
+</form>
+<div class="modal " id="myModal" role="dialog" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title" id="myModalLabel" style="text-align: center">修改状态</h3>
+            </div>
+            <div class="modal-body">
+                <form name="myForm" novalidate>
+                    <div class="form-group" style="width: 100%">
+                        <label for="userId1" style="width: 18%">用户ID</label><input type="text" style="width: 70%"
+                                                                                   id="userId1"
+                                                                                   ng-model="modalUser.userid" disabled>
+                    </div>
+                    <div class="form-group " style="width: 100%">
+                        <label for="username1" style="width: 18%">用户名</label><input type="text" style="width: 70%"
+                                                                                    id="username1"
+                                                                                    ng-model="modalUser.username"
+                                                                                    disabled>
+                    </div>
+                    <div class="form-group" style="width: 100%">
+                        <label for="statusmodify" style="width: 17.5%">状态修改</label> <select id="statusmodify"
+                                                                                            ng-model="modalVerifyUser.status"
+                                                                                            name="modalVerifyUser.status"
+                                                                                            style="width: 70%">
+                        <option ng-value="0">正常</option>
+                        <option ng-value="1">有限封禁</option>
+                        <option ng-value="2">无限封禁</option>
+                    </select>
+                    </div>
+                    <div class="form-group dropdown " style="width: 100%">
+                        <label for="registertimemodify" style="width: 17.5%">截止时间</label>
+                        <input style="width: 70%" class="dropdown-toggle" type="text" data-toggle="dropdown"
+                               id="registertimemodify"
+                               ng-model="modalVerifyUser.deadline" name="modalVerifyUser.deadline"
+                               datepicker-popup="yyyy-MM-dd HH:mm:ss" ng-disabled="modalVerifyUser.status!=1"
+                               placeholder="" required>
+                        <div class="text-center" style="color: red"
+                             ng-show=" modalVerifyUser.status==1&&modalVerifyUser.deadline==null">请输入截止时间
+                        </div>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                            <datetimepicker ng-model="modalVerifyUser.deadline"
+                                            data-datetimepicker-config="{ dropdownSelector: '#registertimemodify' }">
+                            </datetimepicker>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary " ng-click="submitModifyInfo()"
+                                ng-disabled="modalVerifyUser.status==1&&modalVerifyUser.deadline==null">保存修改
+                        </button>
+                        <button type="button" class="btn btn-info " ng-click="closeModal()">退出</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="remindModal" role="dialog" tabindex="-1" aria-labelledby="myModalLabel1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" ng-click="closeModal()" type="button" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h3 style="text-align: center" class="modal-title" id="myModalLabel1">提示信息</h3>
+
+            </div>
+            <div class="modal-body " style="text-align: center">
+                <h4>{{remind}}</h4>
+            </div>
+            <div class="modal-footer" style="text-align: center">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="closeModal()">确定</button>
+            </div>
+        </div>
+    </div>
 </div>

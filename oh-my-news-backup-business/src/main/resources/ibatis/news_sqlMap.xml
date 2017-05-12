@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="news_sqlMap">
+    <resultMap id="news_resultMap" class="com.oh.news.backup.model.po.News">
+        <result property="userid" column="user_id" jdbcType="INTEGER"></result>
+        <result property="newsid" column="id" jdbcType="INTEGER"></result>
+        <result property="newsname" column="topic" jdbcType="VARCHAR"></result>
+        <result property="thumb_up" column="thumb_up" jdbcType="INTEGER"></result>
+        <result property="reportnumber" column="report" jdbcType="INTEGER"></result>
+        <result property="commentnumber" column="commentnum" jdbcType="INTEGER"></result>
+        <result property="issuetime" column="date" jdbcType="TIMESTAMP"></result>
+        <result property="deadline" column="deadline" jdbcType="TIMESTAMP"></result>
+        <result property="status" column="is_limit" jdbcType="INTEGER"></result>
+    </resultMap>
+    <select id="sortbyId" parameterClass="java.util.Map" resultMap="news_resultMap">
+        select `id`,`topic`,`thumb_up`,`report`,`user_id`,`is_limit`,`date`,`deadline`,(SELECT count(`comment`.id) from `comment` where `comment`.article_id=`article`.id) `commentnum` from `article`
+        where is_delete=0
+        <dynamic >
+            <isNotEmpty prepend="and" property="userid">
+                user_id=#userid#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="newsname">
+                topic=#newsname#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="status">
+                is_limit=#status#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="registertime">
+                `date`=#registertime#
+            </isNotEmpty>
+        </dynamic>
+        order by `id` asc limit #currentPage#,#pageItemNum#;
+    </select>
+    <select id="sortbyIdNum" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+        select count(id) from `article`
+        where is_delete=0
+        <dynamic >
+            <isNotEmpty prepend="and" property="userid">
+                user_id=#userid#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="newsname">
+                topic=#newsname#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="status">
+                is_limit=#status#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="registertime">
+                `date`=#registertime#
+            </isNotEmpty>
+        </dynamic>
+        ;
+    </select>
+    <select id="sortbydate" parameterClass="java.util.Map" resultMap="news_resultMap">
+        select `id`,`topic`,`thumb_up`,`report`,`user_id`,`is_limit`,`date`,`deadline`,(SELECT count(`comment`.id) from `comment` where `comment`.article_id=`article`.id) `commentnum` from `article`
+        where is_delete=0
+        <dynamic >
+            <isNotEmpty prepend="and" property="userid">
+                user_id=#userid#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="newsname">
+                topic=#newsname#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="status">
+                is_limit=#status#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="registertime">
+                `date`=#registertime#
+            </isNotEmpty>
+        </dynamic>
+        order by `date` desc limit #currentPage#,#pageItemNum#;
+    </select>
+    <select id="sortbythumbup" parameterClass="java.util.Map" resultMap="news_resultMap">
+        select `id`,`topic`,`thumb_up`,`report`,`user_id`,`is_limit`,`date`,`deadline`,(SELECT count(`comment`.id) from `comment` where `comment`.article_id=`article`.id) `commentnum` from `article`
+        where is_delete=0
+        <dynamic>
+            <isNotEmpty prepend="and" property="userid">
+                user_id=#userid#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="newsname">
+                topic=#newsname#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="status">
+                is_limit=#status#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="registertime">
+                `date`=#registertime#
+            </isNotEmpty>
+        </dynamic>
+        order by `thumb_up` desc limit #currentPage#,#pageItemNum#;
+    </select>
+    <select id="sortbycomment" parameterClass="java.util.Map" resultMap="news_resultMap">
+        select `id`,`topic`,`thumb_up`,`report`,`user_id`,`is_limit`,`date`,`deadline`,(SELECT count(`comment`.id) from `comment` where `comment`.article_id=`article`.id) `commentnum` from `article`
+        where is_delete=0
+        <dynamic >
+            <isNotEmpty prepend="and" property="userid">
+                user_id=#userid#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="newsname">
+                topic=#newsname#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="status">
+                is_limit=#status#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="registertime">
+                `date`=#registertime#
+            </isNotEmpty>
+        </dynamic>
+        order by `commentnum` desc limit #currentPage#,#pageItemNum#;
+    </select>
+    <select id="sortbyreport" parameterClass="java.util.Map" resultMap="news_resultMap">
+        select `id`,`topic`,`thumb_up`,`report`,`user_id`,`is_limit`,`date`,`deadline`,(SELECT count(`comment`.id) from `comment` where `comment`.article_id=`article`.id) `commentnum` from `article`
+        where is_delete=0
+        <dynamic >
+            <isNotEmpty prepend="and" property="userid">
+                user_id=#userid#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="newsname">
+                topic=#newsname#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="status">
+                is_limit=#status#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="registertime">
+                `date`=#registertime#
+            </isNotEmpty>
+        </dynamic>
+        order by `report` desc limit #currentPage#,#pageItemNum#;
+    </select>
+    <select id="sortbystatus" parameterClass="java.util.Map" resultMap="news_resultMap">
+        select `id`,`topic`,`thumb_up`,`report`,`user_id`,`is_limit`,`date`,`deadline`,(SELECT count(`comment`.id) from `comment` where `comment`.article_id=`article`.id) `commentnum` from `article`
+        where is_delete=0
+        <dynamic >
+            <isNotEmpty prepend="and" property="userid">
+                user_id=#userid#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="newsname">
+                topic=#newsname#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="status">
+                is_limit=#status#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="registertime">
+                `date`=#registertime#
+            </isNotEmpty>
+        </dynamic>
+        order by `status` asc limit #currentPage#,#pageItemNum#;
+    </select>
+    <select id="sortbydeadline" parameterClass="java.util.Map" resultMap="news_resultMap">
+        select `id`,`topic`,`thumb_up`,`report`,`user_id`,`is_limit`,`date`,`deadline`,(SELECT count(`comment`.id) from `comment` where `comment`.article_id=`article`.id) `commentnum` from `article`
+        where is_delete=0
+        <dynamic >
+            <isNotEmpty prepend="and" property="userid">
+                user_id=#userid#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="newsname">
+                topic=#newsname#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="status">
+                is_limit=#status#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="registertime">
+                `date`=#registertime#
+            </isNotEmpty>
+        </dynamic>
+        order by `deadline` desc limit #currentPage#,#pageItemNum#;
+    </select>
+<update id="update_news" parameterClass="java.util.Map" >
+    update article set is_limit=#status#,deadline=#deadline# where id=#newsid# and is_delete=0;
+</update>
+</sqlMap>
+

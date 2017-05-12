@@ -169,7 +169,7 @@
     </tx:advice>
 
     <aop:config proxy-target-class="true">
-        <aop:pointcut id="myPointCut" expression="execution(* com.oh.my.news.business.write.manage.*.*(..))"/>
+        <aop:pointcut id="myPointCut" expression="execution(* com.oh.my.news.backup.business.write.manage.*.*(..))"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="myPointCut"/>
     </aop:config>
 

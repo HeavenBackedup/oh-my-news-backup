@@ -8,11 +8,14 @@ var bootPATH = "";
 		var regex = /boot\.js(\?v=.*)?/ig;
 		result = regex.exec(script.src);
 		if (result) {
-			bootPATH = script.src.substring(0,script.src.lastIndexOf("scripts/boot.js")-1);
+			bootPATH = script.src.substring(0,script.src.lastIndexOf("js/boot.js")-1);
 			if (result[1]) {
 				version = result[1];
 			}
 			break;
 		}
+
 	}
-})();
+}
+
+)();

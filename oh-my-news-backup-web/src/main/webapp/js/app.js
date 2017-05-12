@@ -4,20 +4,42 @@
 
 'use strict';
 
-var app = angular.module("app", ['ui.bootstrap','tm.pagination', 'ui.router','searchFilters'], function ($httpProvider) {
-    $httpProvider.defaults.headers.post['Content-Type'] = 'application/json';
-    $httpProvider.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest';
-})
+var app =angular
+    .module('app', [
+        'ngAnimate',
+        'ngAria',
+        'ngCookies',
+        'ngMessages',
+        'ngResource',
+        'ngSanitize',
+        'ngTouch',
+        'ui.router',
+        'ui.bootstrap',
+        'ui.load',
+        'ui.jq',
+        'ui.validate',
+        'ngFileUpload',
+        'ui.bootstrap.pagination',
+        'ui.bootstrap.datetimepicker'
+    ])
     .run(
-    [          '$rootScope', '$state', '$stateParams',
-        function ($rootScope,   $state,   $stateParams) {
-            $rootScope.$state = $state;
-            $rootScope.$stateParams = $stateParams;
-        }
-    ]
-)
-    .config(function ($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise('/app/userVerify');
+        [  '$rootScope', '$state', '$stateParams',
+            function ($rootScope,   $state,   $stateParams) {
+                $rootScope.$state = $state;
+                $rootScope.$stateParams = $stateParams;
+            }
+        ]
+    )
+    .config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', '$compileProvider', '$filterProvider', '$provide',
+        function ($stateProvider,   $urlRouterProvider,   $controllerProvider,   $compileProvider,   $filterProvider,   $provide) {
+            app.controller = $controllerProvider.register;
+            app.directive  = $compileProvider.directive;
+            app.filter     = $filterProvider.register;
+            app.factory    = $provide.factory;
+            app.service    = $provide.service;
+            app.constant   = $provide.constant;
+            app.value      = $provide.value;
+    $urlRouterProvider.otherwise('/login');
 
     $stateProvider
         .state('app', {
@@ -25,15 +47,28 @@ var app = angular.module("app", ['ui.bootstrap','tm.pagination', 'ui.router','se
             url: '/app',
             templateUrl: 'module/app.html'
         })
+        .state('login',{
+            url:'/login',
+            templateUrl:'module/verify/login.html',
+            controller:'loginController'
+
+        })
         .state('app.userVerify', {
             url: '/userVerify',
             templateUrl: 'module/verify/user_verify.html',
-            controller: 'userVerifyController'
+            controller: 'userVerifyController',
+
         })
         .state('app.contentVerify',{
-            url: 'contentVerify',
+            url: '/contentVerify',
             templateUrl: 'module/verify/content_verify.html',
-            controller: 'contentVerifyController'
+            controller: 'contentVerifyController',
+            params:{"userId":null}
+        })
+        .state('app.testHtml',{
+            url: 'testHtml',
+            templateUrl: 'module/verify/test_html.html',
+            controller: 'testHtmlController',
         })
         .state('error',{
             url: '/error',
@@ -42,4 +77,4 @@ var app = angular.module("app", ['ui.bootstrap','tm.pagination', 'ui.router','se
         })
 
 
-});
+}]);

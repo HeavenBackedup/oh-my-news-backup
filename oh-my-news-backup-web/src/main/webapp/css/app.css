@@ -3606,7 +3606,13 @@ a.text-black:hover {
   width: 320px;
 }
 .w-xxl {
-  width: 360px;
+  width: 460px;
+}
+.w-xxxl{
+  width: 40%;
+}
+.w-xxxxl{
+ width: 80%;
 }
 .w-full {
   width: 100%;

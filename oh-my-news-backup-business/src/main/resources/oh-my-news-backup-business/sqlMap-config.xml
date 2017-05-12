@@ -12,4 +12,6 @@
               useStatementNamespaces="true"/>
 
     <sqlMap resource="ibatis/template_sqlMap.xml"></sqlMap>
+    <sqlMap resource="ibatis/user_sqlMap.xml"></sqlMap>
+    <sqlMap resource="ibatis/news_sqlMap.xml"></sqlMap>
 </sqlMapConfig>
